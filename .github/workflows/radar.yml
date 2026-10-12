@@ -37,7 +37,6 @@ permissions:
 
 jobs:
   radar:
-    if: vars.RADAR_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -68,9 +67,9 @@ jobs:
           RADAR_EMAIL_TO: ${{ secrets.RADAR_EMAIL_TO }}
         run: |
           if [ "$COMMAND" = "daily" ]; then
-            python -m radar daily --skip x,hf --out report.md ${RADAR_EMAIL_TO:+--mail}
+            python -m radar daily --skip x,hf,newsites,review,judge,gsc --out report.md ${RADAR_EMAIL_TO:+--mail}
           else
-            python -m radar sources --out report.md ${RADAR_EMAIL_TO:+--mail}
+            python -m radar sources --skip x,judge --out report.md ${RADAR_EMAIL_TO:+--mail}
           fi
           if [ -f report.md ]; then cat report.md >> "$GITHUB_STEP_SUMMARY"; fi
 
